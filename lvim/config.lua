@@ -13,11 +13,6 @@ vim.g.minimap_auto_start = 1
 vim.g.minimap_enable_highlight_colorgroup = false
 vim.g.smoothie_update_interval = 20
 vim.opt.termguicolors = true
-vim.notify = require("notify")
-
--- this is to make sure volar won't make 'property x does not exist on type y' errors
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -53,6 +48,7 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 lvim.builtin.nvimtree.setup.view.width = 40
+lvim.builtin.treesitter.context_commentstring = nil
 lvim.builtin.treesitter.ensure_installed = {
 	"bash",
 	"javascript",
@@ -128,11 +124,21 @@ lvim.plugins = {
 		'wfxr/minimap.vim',
 		'psliwka/vim-smoothie',
 		'mfussenegger/nvim-lint',
-		'rcarriga/nvim-notify',
 		'tpope/vim-surround',
-		"sindrets/diffview.nvim",
+		'sindrets/diffview.nvim',
+		'ggandor/leap.nvim',
 		{ "nvim-telescope/telescope-live-grep-args.nvim", version = "^1.0.0", lazy = true },
 		{ "krtibo/flannel.nvim", name = "flannel", priority = 1000 },
+		{
+			"folke/noice.nvim",
+			event = "VeryLazy",
+			opts = {
+			},
+			dependencies = {
+				"MunifTanjim/nui.nvim",
+				"rcarriga/nvim-notify",
+				}
+		},
 		{ "mxsdev/nvim-dap-vscode-js", lazy = true, requires = {"mfussenegger/nvim-dap"} },
 		{
 			"microsoft/vscode-js-debug",
@@ -212,6 +218,36 @@ lvim.plugins = {
 }
 
 -- Plugin setup
+local palette = require("flannel.palettes").get_palette()
+vim.keymap.set({'n', 'x', 'o'}, 'f', '<Plug>(leap-forward)')
+vim.keymap.set({'n', 'x', 'o'}, 'F', '<Plug>(leap-backward)')
+vim.api.nvim_create_autocmd('ColorScheme', {
+	callback = function ()
+		vim.api.nvim_set_hl(0, 'LeapMatch', { bg = palette.red, fg = palette.base })
+		vim.api.nvim_set_hl(0, 'LeapLabelPrimary', { bg = palette.red, fg = palette.base, bold = true })
+		vim.api.nvim_set_hl(0, 'LeapLabelSecondary', { bg = palette.blue, fg = palette.base, bold = true })
+		vim.api.nvim_set_hl(0, 'LeapBackdrop', { bg = palette.base })
+	end
+})
+require('leap').create_default_mappings()
+
+require("noice").setup({
+  lsp = {
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true,
+    },
+  },
+  presets = {
+    bottom_search = true, -- use a classic bottom cmdline for search
+    command_palette = true, -- position the cmdline and popupmenu together
+    long_message_to_split = true, -- long messages will be sent to a split
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
+  },
+})
+
 require("dap-vscode-js").setup({
 	debugger_path = "/Users/krtibo/.local/share/lunarvim/site/pack/lazy/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
 	adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
