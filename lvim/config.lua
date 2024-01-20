@@ -218,18 +218,8 @@ lvim.plugins = {
 }
 
 -- Plugin setup
-local palette = require("flannel.palettes").get_palette()
 vim.keymap.set({'n', 'x', 'o'}, 'f', '<Plug>(leap-forward)')
 vim.keymap.set({'n', 'x', 'o'}, 'F', '<Plug>(leap-backward)')
-vim.api.nvim_create_autocmd('ColorScheme', {
-	callback = function ()
-		vim.api.nvim_set_hl(0, 'LeapMatch', { bg = palette.red, fg = palette.base })
-		vim.api.nvim_set_hl(0, 'LeapLabelPrimary', { bg = palette.red, fg = palette.base, bold = true })
-		vim.api.nvim_set_hl(0, 'LeapLabelSecondary', { bg = palette.blue, fg = palette.base, bold = true })
-		vim.api.nvim_set_hl(0, 'LeapBackdrop', { bg = palette.base })
-	end
-})
-require('leap').create_default_mappings()
 
 require("noice").setup({
   lsp = {
