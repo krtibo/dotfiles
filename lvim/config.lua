@@ -106,6 +106,7 @@ require("which-key").register({
 	},
 	l = {
 		p = { ":lua vim.lsp.buf.hover()<cr>", "Peek type" },
+		x = { ":LspRestart<cr>", "LSP restart" },
 	},
 	g = {
 		d = { ":DiffviewOpen<cr>", "Diff view" },
@@ -121,12 +122,22 @@ require("which-key").register({
 -- Additional Plugins
 lvim.plugins = {
 	{
-		'wfxr/minimap.vim',
+		'petertriho/nvim-scrollbar',
 		'psliwka/vim-smoothie',
 		'mfussenegger/nvim-lint',
 		'tpope/vim-surround',
 		'sindrets/diffview.nvim',
 		'ggandor/leap.nvim',
+		{
+			"folke/persistence.nvim",
+			event = "BufReadPre", -- this will only start session saving when an actual file was opened
+			opts = {
+				dir = vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/"), -- directory where session files are saved
+				options = { "buffers", "curdir", "tabpages", "winsize" }, -- sessionoptions used for saving
+				pre_save = nil, -- a function to call before saving the session
+				save_empty = false, -- don't save if there are no open file buffers
+			}
+		},
 		{ "nvim-telescope/telescope-live-grep-args.nvim", version = "^1.0.0", lazy = true },
 		{ "krtibo/flannel.nvim", name = "flannel", priority = 1000 },
 		{
@@ -218,6 +229,8 @@ lvim.plugins = {
 }
 
 -- Plugin setup
+require("scrollbar").setup()
+require("scrollbar.handlers.gitsigns").setup()
 vim.keymap.set({'n', 'x', 'o'}, 'f', '<Plug>(leap-forward)')
 vim.keymap.set({'n', 'x', 'o'}, 'F', '<Plug>(leap-backward)')
 
@@ -291,18 +304,6 @@ dap.configurations.rust = {
     stopOnEntry = false,
   },
 }
-
-local lastaccessed
-vim.api.nvim_create_autocmd({'WinEnter'}, {
-  callback = function()
-    local minimapname = '-MINIMAP-'
-    if string.sub(vim.api.nvim_buf_get_name(0), -string.len(minimapname)) == minimapname then
-      vim.api.nvim_set_current_win(lastaccessed)
-    else
-      lastaccessed = vim.api.nvim_eval("win_getid(winnr('#'))")
-    end
-  end
-})
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
 	callback = function()
