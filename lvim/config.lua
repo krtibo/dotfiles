@@ -13,6 +13,7 @@ vim.g.minimap_auto_start = 1
 vim.g.minimap_enable_highlight_colorgroup = false
 vim.g.smoothie_update_interval = 20
 vim.opt.termguicolors = true
+vim.g.peekaboo_window = 'vert bo 80new'
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -110,7 +111,7 @@ require("which-key").register({
 	},
 	g = {
 		d = { ":DiffviewOpen<cr>", "Diff view" },
-		dd = { ":DiffviewClose<cr>", "Diff view close" },
+		D = { ":DiffviewClose<cr>", "Diff view close" },
 	},
 	n = {
 		name = "Wiki",
@@ -128,15 +129,14 @@ lvim.plugins = {
 		'tpope/vim-surround',
 		'sindrets/diffview.nvim',
 		'ggandor/leap.nvim',
+		'junegunn/vim-peekaboo',
 		{
-			"folke/persistence.nvim",
-			event = "BufReadPre", -- this will only start session saving when an actual file was opened
-			opts = {
-				dir = vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/"), -- directory where session files are saved
-				options = { "buffers", "curdir", "tabpages", "winsize" }, -- sessionoptions used for saving
-				pre_save = nil, -- a function to call before saving the session
-				save_empty = false, -- don't save if there are no open file buffers
-			}
+			'rmagatti/auto-session',
+			config = function()
+				require("auto-session").setup {
+					log_level = "error",
+				}
+			end
 		},
 		{ "nvim-telescope/telescope-live-grep-args.nvim", version = "^1.0.0", lazy = true },
 		{ "krtibo/flannel.nvim", name = "flannel", priority = 1000 },
