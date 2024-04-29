@@ -14,6 +14,20 @@ vim.g.minimap_enable_highlight_colorgroup = false
 vim.g.smoothie_update_interval = 20
 vim.opt.termguicolors = true
 vim.g.peekaboo_window = 'vert bo 80new'
+vim.api.nvim_create_autocmd("CursorHold", {
+  buffer = bufnr,
+  callback = function()
+    local opts = {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = 'rounded',
+      source = 'always',
+      prefix = ' ',
+      scope = 'cursor',
+    }
+    vim.diagnostic.open_float(nil, opts)
+  end
+})
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
