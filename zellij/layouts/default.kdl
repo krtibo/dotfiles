@@ -19,6 +19,8 @@ layout {
 
                 tab_normal   "#[fg=#11111b,bg=black]#[fg=blue,bold,bg=#11111b]{index} #[fg=#6C7086,bold,bg=#11111b]{name}#[fg=#11111b,bg=black]"
                 tab_active   "#[fg=#11111b,bg=black]#[fg=red,bold,bg=#11111b]{index} #[fg=black,bold,bg=blue] {name}#[fg=blue,bold,bg=black]"
+                // tab_normal   "#[fg=blue,bold,bg=#11111b] {index} #[fg=#6C7086,bold,bg=#11111b]{name} "
+                // tab_active   "#[fg=red,bold,bg=#11111b] {index} #[fg=black,bold,bg=blue] {name} "
 								tab_separator	" "
 								tab_rename "#[fg=#eba0ac,bg=#181825] {index} {name} {floating_indicator} "
 								tab_sync_indicator       "<> "
