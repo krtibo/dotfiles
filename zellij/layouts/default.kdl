@@ -1,0 +1,33 @@
+layout {
+    default_tab_template {
+        children
+        pane size=1 borderless=true {
+            plugin location="file:~/.config/zellij/plugins/zjstatus.wasm" {
+                format_left   "{mode} #[fg=#89B4FA,bold]{session}"
+                format_center "{tabs}"
+                format_space  ""
+
+                border_enabled  "false"
+                border_char     "─"
+                border_format   "#[fg=#6C7086]{char}"
+                border_position "top"
+
+                hide_frame_for_single_pane "true"
+
+                mode_normal  "#[bg=blue] "
+                mode_tmux    "#[bg=red] "
+
+                tab_normal   "#[fg=#11111b,bg=black]#[fg=blue,bold,bg=#11111b]{index} #[fg=#6C7086,bold,bg=#11111b]{name}#[fg=#11111b,bg=black]"
+                tab_active   "#[fg=#11111b,bg=black]#[fg=red,bold,bg=#11111b]{index} #[fg=black,bold,bg=blue] {name}#[fg=blue,bold,bg=black]"
+								tab_separator	" "
+								tab_rename "#[fg=#eba0ac,bg=#181825] {index} {name} {floating_indicator} "
+								tab_sync_indicator       "<> "
+								tab_fullscreen_indicator "[] "
+								tab_floating_indicator   "⬚ "
+            }
+        }
+        // pane size=2 borderless=true {
+        //     plugin location="zellij:status-bar"
+        // }
+    }
+}
